@@ -1,22 +1,17 @@
-void kmain(void);
 
-int main(void) {
-    kmain();
-
-    for (;;);
-}
+asm (
+    ".section .entry;"
+    ".global _start;"
+    "_start:"
+        "call kmain;"
+);
 
 void bios_putchar(char c) {
-#asm
-    push bp
-    mov bp, sp
-    push ax
-    mov ax, [bp+4]
-    mov ah, #$0e
-    int #$10
-    pop ax
-    pop bp
-#endasm
+    asm volatile (
+        "int $0x10;"
+        :
+        : "a"(c | 0x0e00)
+    );
 }
 
 void bios_puts(char *str) {
@@ -30,11 +25,14 @@ void bios_puts(char *str) {
 }
 
 int bios_getchar(void) {
-#asm
-    xor ax, ax
-    int #$16
-    xor ah, ah
-#endasm
+    int ret;
+    asm volatile (
+        "int $0x16;"
+        "xor %%ah, %%ah;"
+        : "=a"(ret)
+        : "a"(0)
+    );
+    return ret;
 }
 
 void bios_gets(char *str, int limit) {

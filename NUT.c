@@ -3,12 +3,21 @@ asm (
     ".section .entry;"
     ".global _start;"
     "_start:"
+        // Disable VGA cursor
+        "mov $0x01, %ah;"
+        "mov $0x2607, %cx;"
+        "int $0x10;"
         "call kmain;"
 );
 
+#include <stddef.h>
+#include <stdint.h>
+
 #define MK_FP(seg, off) \
-((void* __far *) ((unsigned long) (unsigned) (seg) << 16 | \
-	(unsigned) (off)))
+((void __far *) ((unsigned long) (unsigned) (seg) << 16 | \
+                 (unsigned) (off)))
+
+int ticks = 0;
 
 int text[80][25] = {0};
 int curx = 0;
@@ -19,17 +28,17 @@ int cury = 0;
  */
 char get_color_from_pos(int x) {
 	if(x <= 26) {
-		return 0x2b;
+		return 0x2f;
 	} else if(x >= 26 && x <= 54) {
-		return 0xfb;
+		return 0xf2;
 	} else if (x > 54 && x < 80){
-		return 0x4b;
+		return 0x4f;
 	}
 	return 0x34;
 }
 
 int rand() {
-	return 0;
+	return ticks;
 }
 
 void set_character(char c, char color, int x, int y) {
@@ -224,7 +233,32 @@ void bestemmiare(){
     }
 }
 
+asm (
+    ".section .text;"
+    "timer_isr:"
+        "push %ax;"
+        "push %ds;"
+        "xor %ax, %ax;"
+        "mov %ax, %ds;"
+        "incw (ticks);"
+        "pop %ds;"
+        "pop %ax;"
+        "iretw;"
+);
+
+void timer_isr(void);
+
+struct ivt_entry {
+    uint16_t offset;
+    uint16_t segment;
+};
+
 void kmain(void) {
+    // Hook int 0x1c
+    struct ivt_entry *ivt = (void *)0;
+    ivt[0x1c].segment = 0;
+    ivt[0x1c].offset  = (uint16_t)timer_isr;
+
     char prompt[256];
 	for(int i = 0; i < 80; i++) {
 		for(int j = 0; j < 25; j++) {

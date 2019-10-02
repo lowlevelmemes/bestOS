@@ -173,62 +173,52 @@ char* prefix[] = {"QUASI-", "SUPER-", "PSEUDO-", "ULTRA-", "MEGA-", "MINI-", "MI
 
 void bestemmiare(){
     if(rand() % 2){
-        int lenght = rand() % 2 + 1;
         if(rand() % 2){
             puts(subject_m[rand() % sub_m_size]);
             puts(" ");
             puts(insult_m[rand() % ins_m_size]);
             puts(" ");
             int i=0;
-            for(; i<lenght; i++){
-                if(!(rand() % 11)){
-                    puts(prefix[rand() % pre_size]);
-                }
-                puts(attribute_m[rand() % att_m_size]);
-                puts(" ");
-            }
+			if(!(rand() % 11)){
+				puts(prefix[rand() % pre_size]);
+			}
+			puts(attribute_m[rand() % att_m_size]);
+			puts(" ");
         }else{
             puts(insult_m[rand() % ins_m_size]);
             puts(" ");
             puts(subject_m[rand() % sub_m_size]);
             puts(" ");
             int i=0;
-            for(; i<lenght; i++){
-                if(!(rand() % 11)){
-                    puts(prefix[rand() % pre_size]);
-                }
-                puts(attribute_m[rand() % att_m_size]);
-                puts(" ");
-            }
+			if(!(rand() % 11)){
+				puts(prefix[rand() % pre_size]);
+			}
+			puts(attribute_m[rand() % att_m_size]);
+			puts(" ");
         }
     }else{
-        int lenght = rand() % 2 + 1;
         if(rand() % 2){
             puts(subject_f[rand() % sub_f_size]);
             puts(" ");
             puts(insult_f[rand() % ins_f_size]);
             puts(" ");
             int i=0;
-            for(; i<lenght; i++){
-                if(!(rand() % 11)){
-                    puts(prefix[rand() % pre_size]);
-                }
-                puts(attribute_f[rand() % att_f_size]);
-                puts(" ");
-            }
+			if(!(rand() % 11)){
+				puts(prefix[rand() % pre_size]);
+			}
+			puts(attribute_f[rand() % att_f_size]);
+			puts(" ");
         }else{
             puts(insult_f[rand() % ins_f_size]);
             puts(" ");
             puts(subject_f[rand() % sub_f_size]);
             puts(" ");
             int i=0;
-            for(; i<lenght; i++){
-                if(!(rand() % 11)){
-                    puts(prefix[rand() % pre_size]);
-                }
-                puts(attribute_f[rand() % att_f_size]);
-                puts(" ");
-            }
+			if(!(rand() % 11)){
+				puts(prefix[rand() % pre_size]);
+			}
+			puts(attribute_f[rand() % att_f_size]);
+			puts(" ");
         }
     }
 }

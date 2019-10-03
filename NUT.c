@@ -30,7 +30,7 @@ char get_color_from_pos(int x) {
 	if(x <= 26) {
 		return 0x2f;
 	} else if(x >= 26 && x <= 54) {
-		return 0xf2;
+		return 0x72;
 	} else if (x > 54 && x < 80){
 		return 0x4f;
 	}

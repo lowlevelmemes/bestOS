@@ -178,7 +178,6 @@ void bestemmiare(){
             puts(" ");
             puts(insult_m[rand() % ins_m_size]);
             puts(" ");
-            int i=0;
 			if(!(rand() % 11)){
 				puts(prefix[rand() % pre_size]);
 			}
@@ -189,7 +188,6 @@ void bestemmiare(){
             puts(" ");
             puts(subject_m[rand() % sub_m_size]);
             puts(" ");
-            int i=0;
 			if(!(rand() % 11)){
 				puts(prefix[rand() % pre_size]);
 			}
@@ -202,7 +200,6 @@ void bestemmiare(){
             puts(" ");
             puts(insult_f[rand() % ins_f_size]);
             puts(" ");
-            int i=0;
 			if(!(rand() % 11)){
 				puts(prefix[rand() % pre_size]);
 			}
@@ -213,7 +210,6 @@ void bestemmiare(){
             puts(" ");
             puts(subject_f[rand() % sub_f_size]);
             puts(" ");
-            int i=0;
 			if(!(rand() % 11)){
 				puts(prefix[rand() % pre_size]);
 			}

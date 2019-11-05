@@ -60,6 +60,12 @@ void puts(char *str) {
 	volatile int __far * VGA = MK_FP(0xb800, 0);
 
     for (i = 0; str[i]; i++) {
+		if(str[i] == 'u') {
+			str[i] = 'v';
+		}
+		if(str[i] == 'U') {
+			str[i] = 'V';
+		}
 		if(str[i] != '\n' && str[i] != '\r') {
 			set_character(str[i], get_color_from_pos(curx), curx, cury);
 			curx++;

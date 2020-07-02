@@ -104,7 +104,7 @@ void puts(char *str) {
 }
 
 int bios_getchar(void) {
-    uint16_t ret;
+    int ret;
     asm volatile (
         "int $0x16"
         : "=a"(ret)

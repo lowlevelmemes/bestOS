@@ -110,7 +110,7 @@ int bios_getchar(void) {
         : "=a"(ret)
         : "0"(0)
     );
-    return ret;
+    return ret & 0xff;
 }
 
 void bios_gets(char *str, int limit) {

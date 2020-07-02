@@ -244,7 +244,7 @@ void kmain(void) {
     // Hook int 0x1c
     struct ivt_entry __far *ivt = MK_FP(0x0000, 0x0000);
     CLI();
-    ivt[0x1c].vector  = MK_FP(__builtin_ia16_near_data_segment(), timer_isr);
+    ivt[0x1c].vector = timer_isr;
     STI();
 
     char prompt[256];

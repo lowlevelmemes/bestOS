@@ -1,17 +1,20 @@
 
 asm (
-    ".section .entry;"
-    ".global _start;"
-    "_start:"
+    ".section .entry\n"
+    ".global _start\n"
+    "_start:\n\t"
         // Disable VGA cursor
-        "mov $0x01, %ah;"
-        "mov $0x2607, %cx;"
-        "int $0x10;"
-        "call kmain;"
+        "mov $0x01, %ah\n\t"
+        "mov $0x2607, %cx\n\t"
+        "int $0x10\n\t"
+        "call kmain"
 );
 
 #include <stddef.h>
 #include <stdint.h>
+
+#define STI() asm("sti" ::: "memory");
+#define CLI() asm("cli" ::: "memory");
 
 #define MK_FP(seg, off) \
 ((void __far *) ((unsigned long) (unsigned) (seg) << 16 | \
@@ -101,12 +104,11 @@ void puts(char *str) {
 }
 
 int bios_getchar(void) {
-    int ret;
+    uint16_t ret;
     asm volatile (
-        "int $0x16;"
-        "xor %%ah, %%ah;"
+        "int $0x16"
         : "=a"(ret)
-        : "a"(0)
+        : "0"(0)
     );
     return ret;
 }
@@ -226,30 +228,24 @@ void bestemmiare(){
 }
 
 asm (
-    ".section .text;"
-    "timer_isr:"
-        "push %ax;"
-        "push %ds;"
-        "xor %ax, %ax;"
-        "mov %ax, %ds;"
-        "incw (ticks);"
-        "pop %ds;"
-        "pop %ax;"
-        "iretw;"
+    ".section .text\n"
+    "timer_isr:\n\t"
+        "incw %cs:(ticks)\n\t"
+        "iretw"
 );
 
 void timer_isr(void);
 
 struct ivt_entry {
-    uint16_t offset;
-    uint16_t segment;
+    void __far *vector;
 };
 
 void kmain(void) {
     // Hook int 0x1c
-    struct ivt_entry *ivt = (void *)0;
-    ivt[0x1c].segment = 0;
-    ivt[0x1c].offset  = (uint16_t)timer_isr;
+    struct ivt_entry __far *ivt = MK_FP(0x0000, 0x0000);
+    CLI();
+    ivt[0x1c].vector  = MK_FP(__builtin_ia16_near_data_segment(), timer_isr);
+    STI();
 
     char prompt[256];
 	for(int i = 0; i < 80; i++) {
